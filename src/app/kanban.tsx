@@ -19,38 +19,40 @@ export default function Kanban({
 }) {
   const router = useRouter();
   const [orderedData, setOrderedData] = useState(columns);
-  const { mutate: sortColumn } = api.task.sortColumn.useMutation({
-    onSuccess: () => {
-      toast({
-        description: "Column order updated successfully",
-      });
-    },
-    onError: () => {
-      toast({
-        description: "Something went wrong while trying to sort the column",
-        variant: "destructive",
-      });
-    },
-    onSettled: () => {
-      router.refresh();
-    },
-  });
-  const { mutate: updateTaskOrder } = api.task.updateTaskOrder.useMutation({
-    onSuccess: () => {
-      toast({
-        description: "Task moved successfully",
-      });
-    },
-    onError: () => {
-      toast({
-        description: "Something went wrong while trying to move the task",
-        variant: "destructive",
-      });
-    },
-    onSettled: () => {
-      router.refresh();
-    },
-  });
+  const { mutate: sortColumn, isPending: isSortColumnLoading } =
+    api.task.sortColumn.useMutation({
+      onSuccess: () => {
+        toast({
+          description: "Column order updated successfully",
+        });
+      },
+      onError: () => {
+        toast({
+          description: "Something went wrong while trying to sort the column",
+          variant: "destructive",
+        });
+      },
+      onSettled: () => {
+        router.refresh();
+      },
+    });
+  const { mutate: updateTaskOrder, isPending: isMoveTaskLoading } =
+    api.task.updateTaskOrder.useMutation({
+      onSuccess: () => {
+        toast({
+          description: "Task moved successfully",
+        });
+      },
+      onError: () => {
+        toast({
+          description: "Something went wrong while trying to move the task",
+          variant: "destructive",
+        });
+      },
+      onSettled: () => {
+        router.refresh();
+      },
+    });
 
   useEffect(() => {
     setOrderedData(columns);
@@ -165,7 +167,9 @@ export default function Kanban({
   };
 
   return (
-    <div className="flex gap-4">
+    <div
+      className={`flex gap-4 ${isMoveTaskLoading || isSortColumnLoading ? "opacity-80" : ""}`}
+    >
       <DragDropContext onDragEnd={onDragEnd}>
         <Droppable droppableId="columns" type="column" direction="horizontal">
           {(provided) => (
@@ -179,7 +183,7 @@ export default function Kanban({
                   key={c.id}
                   index={i}
                   column={c}
-                  // isLoading={isLoading}
+                  isLoading={isMoveTaskLoading || isSortColumnLoading}
                 />
               ))}
               {provided.placeholder}

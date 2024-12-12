@@ -7,9 +7,11 @@ import TaskCard from "./task-card";
 export default function Column({
   index,
   column,
+  isLoading,
 }: {
   index: number;
   column: RouterOutputs["task"]["getAllColumns"][number];
+  isLoading: boolean;
 }) {
   return (
     <Draggable draggableId={column.id} index={index}>
@@ -24,7 +26,7 @@ export default function Column({
           <Droppable
             droppableId={column.id}
             type="card"
-            // isDropDisabled={isLoading}
+            isDropDisabled={isLoading}
           >
             {(provided) => (
               <div {...provided.droppableProps} ref={provided.innerRef}>
