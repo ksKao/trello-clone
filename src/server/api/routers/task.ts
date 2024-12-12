@@ -104,4 +104,30 @@ export const taskRouter = createTRPCRouter({
         isolationLevel: "Serializable",
       });
     }),
+  editColumnName: publicProcedure
+    .input(
+      z.object({
+        columnId: z.string().cuid("Invalid column ID"),
+        newTitle: z.string().min(1, "Column name is required"),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      await ctx.db.column.update({
+        data: {
+          title: input.newTitle,
+        },
+        where: {
+          id: input.columnId,
+        },
+      });
+    }),
+  deleteColumn: publicProcedure
+    .input(z.string().cuid("Invalid column ID"))
+    .mutation(async ({ ctx, input }) => {
+      await ctx.db.column.delete({
+        where: {
+          id: input,
+        },
+      });
+    }),
 });

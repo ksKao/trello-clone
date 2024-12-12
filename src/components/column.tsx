@@ -1,10 +1,11 @@
 "use client";
 import type { RouterOutputs } from "@/trpc/react";
 import { Draggable, Droppable } from "@hello-pangea/dnd";
-import { MdDelete, MdModeEditOutline } from "react-icons/md";
+import { MdDelete } from "react-icons/md";
 import NewTaskButton from "./new-task-button";
 import TaskCard from "./task-card";
 import { Button } from "./ui/button";
+import EditColumnTitleButton from "./edit-column-title-button";
 
 export default function Column({
   index,
@@ -28,9 +29,10 @@ export default function Column({
             <h2 className="max-w-full flex-grow overflow-hidden overflow-ellipsis whitespace-nowrap p-2 font-bold">
               {column.title}
             </h2>
-            <Button variant="ghost">
-              <MdModeEditOutline />
-            </Button>
+            <EditColumnTitleButton
+              columnId={column.id}
+              currentTitle={column.title}
+            />
             <Button variant="ghost">
               <MdDelete />
             </Button>
