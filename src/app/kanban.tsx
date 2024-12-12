@@ -35,6 +35,22 @@ export default function Kanban({
       router.refresh();
     },
   });
+  const { mutate: updateTaskOrder } = api.task.updateTaskOrder.useMutation({
+    onSuccess: () => {
+      toast({
+        description: "Task moved successfully",
+      });
+    },
+    onError: () => {
+      toast({
+        description: "Something went wrong while trying to move the task",
+        variant: "destructive",
+      });
+    },
+    onSettled: () => {
+      router.refresh();
+    },
+  });
 
   useEffect(() => {
     setOrderedData(columns);
@@ -97,20 +113,19 @@ export default function Kanban({
         );
 
         reorderedTasks.forEach((card, i) => {
-          // card.sortOrder = i;
+          card.order = i;
         });
 
         sourceColumn.tasks = reorderedTasks;
 
         setOrderedData(newOrderedData);
-        // updateTaskOrder({
-        // 	projectId: project?.id ?? "",
-        // 	tasks: reorderedTasks.map((t) => {
-        // 		return {
-        // 			...t,
-        // 		};
-        // 	}),
-        // });
+        updateTaskOrder(
+          reorderedTasks.map((t) => {
+            return {
+              ...t,
+            };
+          }),
+        );
       } else {
         // Moving card to a different column
         // Remove card from source column
@@ -125,29 +140,26 @@ export default function Kanban({
         destColumn.tasks.splice(destination.index, 0, movedCard);
 
         sourceColumn.tasks.forEach((task, i) => {
-          // task.sortOrder = i;
+          task.order = i;
         });
 
         destColumn.tasks.forEach((task, i) => {
-          // task.sortOrder = i;
+          task.order = i;
         });
 
         setOrderedData(newOrderedData);
-        // updateTaskOrder({
-        // 	projectId: project?.id ?? "",
-        // 	tasks: [
-        // 		...sourceColumn.tasks.map((t) => {
-        // 			return {
-        // 				...t,
-        // 			};
-        // 		}),
-        // 		...destColumn.tasks.map((t) => {
-        // 			return {
-        // 				...t,
-        // 			};
-        // 		}),
-        // 	],
-        // });
+        updateTaskOrder([
+          ...sourceColumn.tasks.map((t) => {
+            return {
+              ...t,
+            };
+          }),
+          ...destColumn.tasks.map((t) => {
+            return {
+              ...t,
+            };
+          }),
+        ]);
       }
     }
   };

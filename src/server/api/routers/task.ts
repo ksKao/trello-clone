@@ -74,4 +74,34 @@ export const taskRouter = createTRPCRouter({
         isolationLevel: "Serializable",
       });
     }),
+  updateTaskOrder: publicProcedure
+    .input(
+      z.array(
+        z.object({
+          id: z.string().cuid("Invalid task ID"),
+          columnId: z.string().cuid("Invalid column ID"),
+          order: z
+            .number()
+            .min(0, "Sort order cannot be negative")
+            .int("Sort order must be an integer"),
+        }),
+      ),
+    )
+    .mutation(async ({ input, ctx }) => {
+      const transaction = input.map((t) =>
+        ctx.db.task.update({
+          where: {
+            id: t.id,
+          },
+          data: {
+            columnId: t.columnId,
+            order: t.order,
+          },
+        }),
+      );
+
+      await ctx.db.$transaction(transaction, {
+        isolationLevel: "Serializable",
+      });
+    }),
 });
