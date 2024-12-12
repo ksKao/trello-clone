@@ -26,7 +26,7 @@ model Task {
     order       Int
     description String
     columnId    String
-    column      Column   @relation(fields: [columnId], references: [id])
+    column      Column   @relation(fields: [columnId], references: [id], onDelete: Cascade)
     createdAt   DateTime @default(now())
     updatedAt   DateTime @updatedAt
 }

@@ -1,11 +1,10 @@
 "use client";
 import type { RouterOutputs } from "@/trpc/react";
 import { Draggable, Droppable } from "@hello-pangea/dnd";
-import { MdDelete } from "react-icons/md";
 import NewTaskButton from "./new-task-button";
 import TaskCard from "./task-card";
-import { Button } from "./ui/button";
 import EditColumnTitleButton from "./edit-column-title-button";
+import DeleteColumnButton from "./delete-column-button";
 
 export default function Column({
   index,
@@ -33,9 +32,7 @@ export default function Column({
               columnId={column.id}
               currentTitle={column.title}
             />
-            <Button variant="ghost">
-              <MdDelete />
-            </Button>
+            <DeleteColumnButton columnId={column.id} />
           </div>
           <Droppable
             droppableId={column.id}
