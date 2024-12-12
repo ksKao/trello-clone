@@ -12,11 +12,15 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "@/hooks/use-toast";
-import { api } from "@/trpc/react";
+import { api, type RouterOutputs } from "@/trpc/react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
-export default function NewTaskButton({ columnId }: { columnId: string }) {
+export default function NewTaskButton({
+  column,
+}: {
+  column: RouterOutputs["task"]["getAllColumns"][number];
+}) {
   const router = useRouter();
   const [open, setOpen] = useState(false);
   const [title, setTitle] = useState("");
@@ -56,10 +60,20 @@ export default function NewTaskButton({ columnId }: { columnId: string }) {
               return;
             }
 
+            let maxOrder = column.tasks.sort((a, b) => b.order - a.order)[0]
+              ?.order;
+
+            // if there is no task
+            if (maxOrder === undefined) maxOrder = 0;
+
+            // else max order is the max + 1
+            maxOrder++;
+
             addTask({
-              columnId,
+              columnId: column.id,
               title,
               description,
+              order: maxOrder,
             });
           }}
         >

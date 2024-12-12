@@ -20,7 +20,7 @@ export default function Column({
           ref={provided.innerRef}
           className="w-72 bg-gray-600 p-4"
         >
-          <span>{column.name}</span>
+          <span>{column.title}</span>
           <Droppable
             droppableId={column.id}
             type="card"
@@ -36,7 +36,7 @@ export default function Column({
             )}
           </Droppable>
           <div>
-            <NewTaskButton columnId={column.id} />
+            <NewTaskButton column={column} />
           </div>
         </div>
       )}

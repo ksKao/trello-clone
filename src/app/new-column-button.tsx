@@ -11,11 +11,15 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
-import { api } from "@/trpc/react";
+import { api, type RouterOutputs } from "@/trpc/react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
-export default function NewColumnButton() {
+export default function NewColumnButton({
+  columns,
+}: {
+  columns: RouterOutputs["task"]["getAllColumns"];
+}) {
   const router = useRouter();
   const [title, setTitle] = useState("");
   const [open, setOpen] = useState(false);
@@ -56,7 +60,16 @@ export default function NewColumnButton() {
               });
               return;
             }
-            addColumn(title);
+
+            let maxOrder = columns.sort((a, b) => b.order - a.order)[0]?.order;
+
+            if (maxOrder === undefined) maxOrder = 0;
+            else maxOrder++;
+
+            addColumn({
+              title,
+              order: maxOrder,
+            });
           }}
         >
           <Label htmlFor="title">Title</Label>

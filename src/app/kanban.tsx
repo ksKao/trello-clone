@@ -1,21 +1,44 @@
 "use client";
 
-import type { RouterOutputs } from "@/trpc/react";
+import { api, type RouterOutputs } from "@/trpc/react";
 import {
   DragDropContext,
   Droppable,
   type OnDragEndResponder,
 } from "@hello-pangea/dnd";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Column from "./column";
 import NewColumnButton from "./new-column-button";
+import { useRouter } from "next/navigation";
+import { toast } from "@/hooks/use-toast";
 
 export default function Kanban({
   columns,
 }: {
   columns: RouterOutputs["task"]["getAllColumns"];
 }) {
+  const router = useRouter();
   const [orderedData, setOrderedData] = useState(columns);
+  const { mutate: sortColumn } = api.task.sortColumn.useMutation({
+    onSuccess: () => {
+      toast({
+        description: "Column order updated successfully",
+      });
+    },
+    onError: () => {
+      toast({
+        description: "Something went wrong while trying to sort the column",
+        variant: "destructive",
+      });
+    },
+    onSettled: () => {
+      router.refresh();
+    },
+  });
+
+  useEffect(() => {
+    setOrderedData(columns);
+  }, [columns]);
 
   function reorder<T>(list: T[], startIndex: number, endIndex: number) {
     const result = Array.from(list);
@@ -46,12 +69,11 @@ export default function Kanban({
         }),
       );
       setOrderedData(items);
-      // sortColumn({
-      // 	projectId: project?.id ?? "",
-      // 	sortedColumns: items.map((i) => {
-      // 		return { ...i };
-      // 	}),
-      // });
+      sortColumn(
+        items.map((i) => {
+          return { ...i };
+        }),
+      );
     }
 
     if (type === "card") {
@@ -149,7 +171,7 @@ export default function Kanban({
                 />
               ))}
               {provided.placeholder}
-              <NewColumnButton />
+              <NewColumnButton columns={columns} />
             </div>
           )}
         </Droppable>
