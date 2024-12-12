@@ -10,11 +10,20 @@ datasource db {
     url      = env("DATABASE_URL")
 }
 
-model Post {
-    id        Int      @id @default(autoincrement())
+model Column {
+    id        String   @id @default(cuid())
     name      String
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
 
-    @@index([name])
+    task Task[]
+}
+
+model Task {
+    id        String   @id @default(cuid())
+    title     String
+    columnId  String
+    column    Column   @relation(fields: [columnId], references: [id])
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
 }
