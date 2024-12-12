@@ -5,7 +5,7 @@ export const taskRouter = createTRPCRouter({
   getAllColumns: publicProcedure.query(async ({ ctx }) => {
     return await ctx.db.column.findMany({
       include: {
-        task: true,
+        tasks: true,
       },
     });
   }),
@@ -15,6 +15,23 @@ export const taskRouter = createTRPCRouter({
       await ctx.db.column.create({
         data: {
           name: input,
+        },
+      });
+    }),
+  addTask: publicProcedure
+    .input(
+      z.object({
+        columnId: z.string().cuid("Invalid column ID"),
+        title: z.string().min(1, "Title is required"),
+        description: z.string(),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      await ctx.db.task.create({
+        data: {
+          title: input.title,
+          description: input.description,
+          columnId: input.columnId,
         },
       });
     }),

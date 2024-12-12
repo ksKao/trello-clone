@@ -16,14 +16,15 @@ model Column {
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
 
-    task Task[]
+    tasks Task[]
 }
 
 model Task {
-    id        String   @id @default(cuid())
-    title     String
-    columnId  String
-    column    Column   @relation(fields: [columnId], references: [id])
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
+    id          String   @id @default(cuid())
+    title       String
+    description String
+    columnId    String
+    column      Column   @relation(fields: [columnId], references: [id])
+    createdAt   DateTime @default(now())
+    updatedAt   DateTime @updatedAt
 }

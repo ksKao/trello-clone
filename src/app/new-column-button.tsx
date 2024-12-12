@@ -10,21 +10,20 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
-import { toast } from "@/hooks/use-toast";
+import { useToast } from "@/hooks/use-toast";
 import { api } from "@/trpc/react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
-export default function NewTaskButton({ columnId }: { columnId: string }) {
+export default function NewColumnButton() {
   const router = useRouter();
-  const [open, setOpen] = useState(false);
   const [title, setTitle] = useState("");
-  const [description, setDescription] = useState("");
-  const { mutate: addTask, isPending } = api.task.addTask.useMutation({
+  const [open, setOpen] = useState(false);
+  const { toast } = useToast();
+  const { mutate: addColumn, isPending } = api.task.addColumn.useMutation({
     onSuccess: async () => {
       toast({
-        description: "Task added successfully",
+        description: "Column added successfully",
       });
       setOpen(false);
       router.refresh();
@@ -32,7 +31,7 @@ export default function NewTaskButton({ columnId }: { columnId: string }) {
     onError: () => {
       toast({
         description:
-          "Something went wrong while adding a new task. Please try again later",
+          "Something went wrong while adding a new column. Please try again later",
         variant: "destructive",
       });
     },
@@ -40,10 +39,12 @@ export default function NewTaskButton({ columnId }: { columnId: string }) {
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger>Add task</DialogTrigger>
+      <DialogTrigger asChild>
+        <Button>Add Column</Button>
+      </DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Add Task</DialogTitle>
+          <DialogTitle>Add a new column</DialogTitle>
         </DialogHeader>
         <form
           onSubmit={(e) => {
@@ -55,12 +56,7 @@ export default function NewTaskButton({ columnId }: { columnId: string }) {
               });
               return;
             }
-
-            addTask({
-              columnId,
-              title,
-              description,
-            });
+            addColumn(title);
           }}
         >
           <Label htmlFor="title">Title</Label>
@@ -70,16 +66,7 @@ export default function NewTaskButton({ columnId }: { columnId: string }) {
             onChange={(e) => setTitle(e.target.value)}
             placeholder="Title"
           />
-          <div className="h-4" />
-          <Label htmlFor="description">Description</Label>
-          <Textarea
-            id="description"
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-            placeholder="Description"
-            className="resize-none"
-          />
-          <Button className="mt-4 w-full" isLoading={isPending}>
+          <Button isLoading={isPending} className="mt-4 w-full">
             Submit
           </Button>
         </form>
