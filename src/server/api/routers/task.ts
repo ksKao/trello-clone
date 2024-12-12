@@ -130,4 +130,32 @@ export const taskRouter = createTRPCRouter({
         },
       });
     }),
+  editTask: publicProcedure
+    .input(
+      z.object({
+        taskId: z.string().cuid("Invalid task ID"),
+        newTitle: z.string().min(1, "Title is required"),
+        newDescription: z.string(),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      await ctx.db.task.update({
+        data: {
+          title: input.newTitle,
+          description: input.newDescription,
+        },
+        where: {
+          id: input.taskId,
+        },
+      });
+    }),
+  deleteTask: publicProcedure
+    .input(z.string().cuid("Invalid task ID"))
+    .mutation(async ({ ctx, input }) => {
+      await ctx.db.task.delete({
+        where: {
+          id: input,
+        },
+      });
+    }),
 });
