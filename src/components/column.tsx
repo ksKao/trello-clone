@@ -43,7 +43,7 @@ export default function Column({
               <div
                 {...provided.droppableProps}
                 ref={provided.innerRef}
-                className="max-h-[calc(100%-40px-16px)] flex-grow overflow-y-auto px-2"
+                className="max-h-[calc(100%-40px-16px)] min-h-2 flex-grow overflow-y-auto px-2"
               >
                 {column.tasks.map((task, i) => (
                   <TaskCard task={task} index={i} key={task.id} />
