@@ -172,7 +172,7 @@ export default function Kanban({
 
   return (
     <div
-      className={`flex gap-4 ${isMoveTaskLoading || isSortColumnLoading ? "opacity-80" : ""}`}
+      className={`flex gap-4 px-4 ${isMoveTaskLoading || isSortColumnLoading ? "opacity-80" : ""}`}
     >
       <DragDropContext onDragEnd={onDragEnd}>
         <Droppable droppableId="columns" type="column" direction="horizontal">

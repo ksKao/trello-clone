@@ -19,7 +19,10 @@ export default function TaskCard({
             className="mb-2 w-full rounded-md border-2 border-primary-foreground bg-primary-foreground p-2 hover:border-primary dark:border-input dark:bg-input dark:hover:border-primary"
             role="button"
           >
-            <p className="p-4">{task.title}</p>
+            <h3 className="font-semibold">{task.title}</h3>
+            {task.description && (
+              <p className="mt-2 text-muted-foreground">{task.description}</p>
+            )}
           </div>
         );
       }}

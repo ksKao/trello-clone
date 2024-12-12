@@ -15,6 +15,7 @@ import { toast } from "@/hooks/use-toast";
 import { api, type RouterOutputs } from "@/trpc/react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { FaPlus } from "react-icons/fa";
 
 export default function NewTaskButton({
   column,
@@ -44,7 +45,14 @@ export default function NewTaskButton({
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger>Add task</DialogTrigger>
+      <DialogTrigger asChild>
+        <Button
+          variant="ghost"
+          className="m-2 mb-0 justify-start px-2 font-semibold"
+        >
+          <FaPlus className="mr-2" /> Add a card
+        </Button>
+      </DialogTrigger>
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Add Task</DialogTitle>

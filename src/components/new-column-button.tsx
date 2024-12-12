@@ -44,7 +44,9 @@ export default function NewColumnButton() {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button>Add Column</Button>
+        <Button className="min-w-[20rem] rounded-md bg-input p-2 text-center font-bold text-foreground hover:bg-primary-foreground/90 dark:bg-primary-foreground dark:hover:bg-primary-foreground/50">
+          Add Column
+        </Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
