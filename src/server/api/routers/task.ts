@@ -1,3 +1,4 @@
+import { z } from "zod";
 import { createTRPCRouter, publicProcedure } from "../trpc";
 
 export const taskRouter = createTRPCRouter({
@@ -8,4 +9,13 @@ export const taskRouter = createTRPCRouter({
       },
     });
   }),
+  addColumn: publicProcedure
+    .input(z.string().min(1, "Column title is required"))
+    .mutation(async ({ ctx, input }) => {
+      await ctx.db.column.create({
+        data: {
+          name: input,
+        },
+      });
+    }),
 });
