@@ -11,12 +11,16 @@ import Column from "./column";
 import NewColumnButton from "./new-column-button";
 import { useRouter } from "next/navigation";
 import { toast } from "@/hooks/use-toast";
+import { useHydrateAtoms } from "jotai/utils";
+import kanbanAtom from "@/lib/atoms/kanban-atom";
 
 export default function Kanban({
   columns,
 }: {
   columns: RouterOutputs["task"]["getAllColumns"];
 }) {
+  useHydrateAtoms([[kanbanAtom, columns]] as const);
+
   const router = useRouter();
   const [orderedData, setOrderedData] = useState(columns);
   const { mutate: sortColumn, isPending: isSortColumnLoading } =
@@ -187,7 +191,7 @@ export default function Kanban({
                 />
               ))}
               {provided.placeholder}
-              <NewColumnButton columns={columns} />
+              <NewColumnButton />
             </div>
           )}
         </Droppable>

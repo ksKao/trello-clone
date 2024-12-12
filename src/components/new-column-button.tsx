@@ -11,15 +11,15 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
-import { api, type RouterOutputs } from "@/trpc/react";
+import kanbanAtom from "@/lib/atoms/kanban-atom";
+import { api } from "@/trpc/react";
+import { useAtom } from "jotai";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
-export default function NewColumnButton({
-  columns,
-}: {
-  columns: RouterOutputs["task"]["getAllColumns"];
-}) {
+export default function NewColumnButton() {
+  const [columns] = useAtom(kanbanAtom);
+
   const router = useRouter();
   const [title, setTitle] = useState("");
   const [open, setOpen] = useState(false);

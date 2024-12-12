@@ -1,5 +1,5 @@
 import { api, HydrateClient } from "@/trpc/server";
-import Kanban from "./kanban";
+import Kanban from "@/components/kanban";
 
 export default async function Home() {
   const columns = await api.task.getAllColumns();
