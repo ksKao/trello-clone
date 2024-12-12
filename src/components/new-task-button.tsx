@@ -32,6 +32,8 @@ export default function NewTaskButton({
         description: "Task added successfully",
       });
       setOpen(false);
+      setTitle("");
+      setDescription("");
       router.refresh();
     },
     onError: () => {

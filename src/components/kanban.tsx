@@ -172,13 +172,14 @@ export default function Kanban({
 
   return (
     <div
-      className={`flex gap-4 px-4 ${isMoveTaskLoading || isSortColumnLoading ? "opacity-80" : ""}`}
+      className={`flex gap-4 ${isMoveTaskLoading || isSortColumnLoading ? "opacity-80" : ""}`}
     >
       <DragDropContext onDragEnd={onDragEnd}>
         <Droppable droppableId="columns" type="column" direction="horizontal">
           {(provided) => (
             <div
-              className="flex h-full max-h-[calc(100%-2rem)] w-fit gap-x-3 pr-8 pt-4"
+              // need to add -20px to factor in the horizontal scrollbar height
+              className="flex h-[calc(100svh-20px)] max-h-[calc(100svh-20px)] w-fit gap-x-3 p-4"
               {...provided.droppableProps}
               ref={provided.innerRef}
             >

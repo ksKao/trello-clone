@@ -22,7 +22,7 @@ export default function Column({
           {...provided.draggableProps}
           {...provided.dragHandleProps}
           ref={provided.innerRef}
-          className="flex h-fit max-h-full w-80 min-w-[20rem] flex-col overflow-hidden rounded-md border bg-input pb-2 dark:border-0 dark:bg-primary-foreground"
+          className="flex h-fit max-h-full w-72 flex-col overflow-hidden rounded-md border bg-input pb-2 dark:border-0 dark:bg-primary-foreground"
         >
           <div className="flex items-center gap-2 p-2">
             <h2 className="max-w-full flex-grow overflow-hidden overflow-ellipsis whitespace-nowrap p-2 font-bold">
@@ -43,7 +43,7 @@ export default function Column({
               <div
                 {...provided.droppableProps}
                 ref={provided.innerRef}
-                className="mt-2 max-h-[calc(100%-40px-16px)] flex-grow overflow-auto px-2"
+                className="max-h-[calc(100%-40px-16px)] flex-grow overflow-y-auto px-2"
               >
                 {column.tasks.map((task, i) => (
                   <TaskCard task={task} index={i} key={task.id} />

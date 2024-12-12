@@ -30,6 +30,7 @@ export default function NewColumnButton() {
         description: "Column added successfully",
       });
       setOpen(false);
+      setTitle("");
       router.refresh();
     },
     onError: () => {
