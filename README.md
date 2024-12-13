@@ -1,29 +1,85 @@
-# Create T3 App
+# Trello Clone
 
-This is a [T3 Stack](https://create.t3.gg/) project bootstrapped with `create-t3-app`.
+This project is a *Trello clone* built with the [Create T3 App](https://create.t3.gg/). It aims to replicate the functionality and interface of Trello, allowing users to manage tasks in an organized, column-based layout. This application is built with modern web development tools and best practices.
 
-## What's next? How do I make an app with this?
+### Key Technologies
+- **Programming Language:** TypeScript
+- **Framework:** Next.js & React
+- **Styling:** TailwindCSS & Shadcn
+- **State Management:** React Query & Jotai
+- **API:** tRPC
+- **Database:** Prisma, Postgres, and Supabase
+- **Hosting:** Vercel
 
-We try to keep this project as simple as possible, so you can start with just the scaffolding we set up for you, and add additional things later when they become necessary.
+## Setup
 
-If you are not familiar with the different technologies used in this project, please refer to the respective docs. If you still are in the wind, please join our [Discord](https://t3.gg/discord) and ask for help.
+### 1. Clone the repository
+Clone this repository to your local machine:
+```bash
+git clone <repository-url>
+```
 
-- [Next.js](https://nextjs.org)
-- [NextAuth.js](https://next-auth.js.org)
-- [Prisma](https://prisma.io)
-- [Drizzle](https://orm.drizzle.team)
-- [Tailwind CSS](https://tailwindcss.com)
-- [tRPC](https://trpc.io)
+### 2. Install dependencies
+Install the project dependencies using the following command:
+```bash
+npm install --legacy-peer-deps
+```
+**Note:** The `--legacy-peer-deps` flag is required due to compatibility issues with React 19 and some libraries where they have not updated their dependencies yet. You may need to use the same flag if you encounter issues installing new packages (e.g., `npm i <package-name> --legacy-peer-deps`).
 
-## Learn More
+### 3. Set up the Postgres database
+You need a Postgres database for this app. It can either be:
+- A local Postgres database.
+- A cloud-hosted database, such as [Supabase](https://supabase.com/) or [Neon](https://neon.tech/).
 
-To learn more about the [T3 Stack](https://create.t3.gg/), take a look at the following resources:
+If you're deploying on Vercel, make sure your database is externally accessible (e.g., hosted on Supabase or Neon).
 
-- [Documentation](https://create.t3.gg/)
-- [Learn the T3 Stack](https://create.t3.gg/en/faq#what-learning-resources-are-currently-available) — Check out these awesome tutorials
+### 4. Configure environment variables
+- Copy the `.env.example` file and rename it to `.env`.
+- In the `.env` file, provide the connection URL for your Postgres database under the `DATABASE_URL` variable.
 
-You can check out the [create-t3-app GitHub repository](https://github.com/t3-oss/create-t3-app) — your feedback and contributions are welcome!
+Example:
+```bash
+DATABASE_URL="postgresql://user:password@hostname:port/database_name"
+```
 
-## How do I deploy this?
+### 5. Set up Prisma schema
+Run the following command to push the Prisma schema to your database:
+```bash
+npx prisma db push
+```
 
-Follow our deployment guides for [Vercel](https://create.t3.gg/en/deployment/vercel), [Netlify](https://create.t3.gg/en/deployment/netlify) and [Docker](https://create.t3.gg/en/deployment/docker) for more information.
+### 6. Generate Prisma client
+Generate the Prisma client, which allows the app to interact with the database:
+```bash
+npx prisma generate
+```
+
+### 7. Run the project locally
+Start the development server:
+```bash
+npm run dev
+```
+
+The app will now be running on http://localhost:3000.
+
+**Note:** This guide does not cover the deployment process, as deployment can vary depending on your chosen platform. If you're deploying on Vercel, refer to their [documentation](https://vercel.com/docs) for deployment steps.
+
+---
+
+## Features
+
+- *Column Management*
+  - Add new columns
+  - Edit column titles
+  - Sort columns
+  - Delete columns
+
+- *Task Management*
+  - Add tasks to columns
+  - Edit task title and description
+  - Move tasks between columns
+  - Delete tasks
+
+- *UI & Responsiveness*
+  - Fully responsive and accessible design
+  - Intuitive drag-and-drop task organization
