@@ -76,9 +76,9 @@ export default function RegisterPage() {
           onChange={(e) => setPassword(e.target.value)}
         />
         <div className="h-2" />
-        <Label htmlFor="password">Confirm Password</Label>
+        <Label htmlFor="confirmPassword">Confirm Password</Label>
         <Input
-          id="password"
+          id="confirmPassword"
           placeholder="••••••••"
           type="password"
           value={confirmPassword}

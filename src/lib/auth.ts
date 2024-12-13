@@ -15,6 +15,15 @@ export function generateSessionToken(): string {
   return token;
 }
 
+export function hashPasswordWithSalt(password: string, salt: string) {
+  return encodeHexLowerCase(sha256(new TextEncoder().encode(password + salt)));
+}
+
+export function getSessionExpiryDate() {
+  // 30 days
+  return new Date(Date.now() + 1000 * 60 * 60 * 24 * 30);
+}
+
 export async function createSession(
   token: string,
   userId: string,
@@ -23,7 +32,7 @@ export async function createSession(
   const session: Session = {
     id: sessionId,
     userId,
-    expiresAt: new Date(Date.now() + 1000 * 60 * 60 * 24 * 30),
+    expiresAt: getSessionExpiryDate(),
   };
   await db.session.create({
     data: session,
@@ -52,7 +61,7 @@ export async function validateSessionToken(
     return { session: null, user: null };
   }
   if (Date.now() >= session.expiresAt.getTime() - 1000 * 60 * 60 * 24 * 15) {
-    session.expiresAt = new Date(Date.now() + 1000 * 60 * 60 * 24 * 30);
+    session.expiresAt = getSessionExpiryDate();
     await db.session.update({
       where: {
         id: session.id,
