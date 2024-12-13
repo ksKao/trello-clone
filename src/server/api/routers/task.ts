@@ -1,9 +1,12 @@
 import { z } from "zod";
-import { createTRPCRouter, publicProcedure } from "../trpc";
+import { createTRPCRouter, protectedProcedure } from "../trpc";
 
 export const taskRouter = createTRPCRouter({
-  getAllColumns: publicProcedure.query(async ({ ctx }) => {
+  getAllColumns: protectedProcedure.query(async ({ ctx }) => {
     return await ctx.db.column.findMany({
+      where: {
+        userId: ctx.auth.user.id,
+      },
       include: {
         tasks: {
           orderBy: {
@@ -16,7 +19,7 @@ export const taskRouter = createTRPCRouter({
       },
     });
   }),
-  addColumn: publicProcedure
+  addColumn: protectedProcedure
     .input(
       z.object({
         title: z.string().min(1, "Title is required"),
@@ -27,10 +30,11 @@ export const taskRouter = createTRPCRouter({
       await ctx.db.column.create({
         data: {
           ...input,
+          userId: ctx.auth.user.id,
         },
       });
     }),
-  addTask: publicProcedure
+  addTask: protectedProcedure
     .input(
       z.object({
         columnId: z.string().cuid("Invalid column ID"),
@@ -46,7 +50,7 @@ export const taskRouter = createTRPCRouter({
         },
       });
     }),
-  sortColumn: publicProcedure
+  sortColumn: protectedProcedure
     .input(
       z.array(
         z.object({
@@ -63,6 +67,7 @@ export const taskRouter = createTRPCRouter({
         ctx.db.column.update({
           where: {
             id: c.id,
+            userId: ctx.auth.user.id,
           },
           data: {
             order: c.sortOrder,
@@ -74,7 +79,7 @@ export const taskRouter = createTRPCRouter({
         isolationLevel: "Serializable",
       });
     }),
-  updateTaskOrder: publicProcedure
+  updateTaskOrder: protectedProcedure
     .input(
       z.array(
         z.object({
@@ -88,14 +93,17 @@ export const taskRouter = createTRPCRouter({
       ),
     )
     .mutation(async ({ input, ctx }) => {
-      const transaction = input.map((t) =>
+      const transaction = input.map((task) =>
         ctx.db.task.update({
           where: {
-            id: t.id,
+            id: task.id,
+            column: {
+              userId: ctx.auth.user.id,
+            },
           },
           data: {
-            columnId: t.columnId,
-            order: t.order,
+            columnId: task.columnId,
+            order: task.order,
           },
         }),
       );
@@ -104,7 +112,7 @@ export const taskRouter = createTRPCRouter({
         isolationLevel: "Serializable",
       });
     }),
-  editColumnName: publicProcedure
+  editColumnName: protectedProcedure
     .input(
       z.object({
         columnId: z.string().cuid("Invalid column ID"),
@@ -118,19 +126,21 @@ export const taskRouter = createTRPCRouter({
         },
         where: {
           id: input.columnId,
+          userId: ctx.auth.user.id,
         },
       });
     }),
-  deleteColumn: publicProcedure
+  deleteColumn: protectedProcedure
     .input(z.string().cuid("Invalid column ID"))
     .mutation(async ({ ctx, input }) => {
       await ctx.db.column.delete({
         where: {
           id: input,
+          userId: ctx.auth.user.id,
         },
       });
     }),
-  editTask: publicProcedure
+  editTask: protectedProcedure
     .input(
       z.object({
         taskId: z.string().cuid("Invalid task ID"),
@@ -146,15 +156,21 @@ export const taskRouter = createTRPCRouter({
         },
         where: {
           id: input.taskId,
+          column: {
+            userId: ctx.auth.user.id,
+          },
         },
       });
     }),
-  deleteTask: publicProcedure
+  deleteTask: protectedProcedure
     .input(z.string().cuid("Invalid task ID"))
     .mutation(async ({ ctx, input }) => {
       await ctx.db.task.delete({
         where: {
           id: input,
+          column: {
+            userId: ctx.auth.user.id,
+          },
         },
       });
     }),

@@ -179,7 +179,7 @@ export default function Kanban({
           {(provided) => (
             <div
               // need to add -20px to factor in the horizontal scrollbar height
-              className="flex h-[calc(100svh-20px)] max-h-[calc(100svh-20px)] w-fit gap-x-3 p-4"
+              className="flex h-[calc(100svh-5rem)] max-h-[calc(100svh-5rem)] w-fit gap-x-3 p-4"
               {...provided.droppableProps}
               ref={provided.innerRef}
             >
