@@ -1,10 +1,11 @@
 import { z } from "zod";
-import { createTRPCRouter, publicProcedure } from "../trpc";
+import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc";
 import { TRPCError } from "@trpc/server";
 import {
   createSession,
   generateSessionToken,
   hashPasswordWithSalt,
+  invalidateSession,
   setSessionTokenCookie,
 } from "@/lib/auth";
 
@@ -86,4 +87,7 @@ export const userRouter = createTRPCRouter({
       const session = await createSession(token, user.id);
       await setSessionTokenCookie(token, session.expiresAt);
     }),
+  logout: protectedProcedure.mutation(async ({ ctx }) => {
+    await invalidateSession(ctx.auth.session.id);
+  }),
 });

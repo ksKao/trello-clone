@@ -115,6 +115,8 @@ export const getCurrentSession = cache(
   },
 );
 
+export type UserSafe = Omit<User, "salt" | "password">;
+
 export type SessionValidationResult =
-  | { session: Session; user: User }
+  | { session: Session; user: UserSafe }
   | { session: null; user: null };

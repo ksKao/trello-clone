@@ -26,10 +26,10 @@ import { getCurrentSession } from "@/lib/auth";
  * @see https://trpc.io/docs/server/context
  */
 export const createTRPCContext = async (opts: { headers: Headers }) => {
-  const { user } = await getCurrentSession();
+  const auth = await getCurrentSession();
   return {
     db,
-    user,
+    auth,
     ...opts,
   };
 };
@@ -119,13 +119,13 @@ export const publicProcedure = t.procedure.use(timingMiddleware);
 export const protectedProcedure = t.procedure
   .use(timingMiddleware)
   .use(({ ctx, next }) => {
-    if (!ctx.user) {
+    if (!ctx.auth.user || !ctx.auth.session) {
       throw new TRPCError({ code: "UNAUTHORIZED" });
     }
     return next({
       ctx: {
         // infers the `session` as non-nullable
-        user: ctx.user,
+        auth: ctx.auth,
       },
     });
   });
