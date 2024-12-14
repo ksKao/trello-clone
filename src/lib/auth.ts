@@ -52,7 +52,7 @@ export async function validateSessionToken(
       user: true,
     },
   });
-  if (result === null) {
+  if (!result) {
     return { session: null, user: null };
   }
   const { user, ...session } = result;
