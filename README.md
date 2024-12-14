@@ -83,6 +83,20 @@ The app will now be running on http://localhost:3000.
 
 ---
 
+## Docker
+
+This repository also includes a Docker configuration as an alternative setup method. The `docker-compose.yml` file defines two services: one for hosting the PostgreSQL database and another for running the app.
+
+If you choose to run the application with Docker, you'll need to provide the environment variables `POSTGRES_USER`, `POSTGRES_PASSWORD`, and `POSTGRES_DB` for the PostgreSQL service.
+
+To launch the services with hot reloading, use the following command:
+
+```bash
+docker compose up --watch
+```
+
+---
+
 ## Features
 
 - _Column Management_
