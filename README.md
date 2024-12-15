@@ -2,7 +2,7 @@
 
 This project is a _Trello clone_ built with the [Create T3 App](https://create.t3.gg/). It aims to replicate the functionality and interface of Trello, allowing users to manage tasks in an organized, column-based layout. This application is built with modern web development tools and best practices.
 
-### Key Technologies
+## Key Technologies
 
 - **Programming Language:** TypeScript
 - **Framework:** Next.js & React
@@ -12,6 +12,20 @@ This project is a _Trello clone_ built with the [Create T3 App](https://create.t
 - **Database:** Prisma, Postgres, and Supabase
 - **Hosting:** Vercel
 - **Testing:** Vitest
+
+## Bonus Tasks
+
+1. Authentication and Authorization: Users can register and log in using a username and password. Passwords are securely hashed using SHA256 with a salt to enhance security. Each user can only access their own board, ensuring data privacy and segregation.
+
+2. Unit Testing: Several unit tests have been implemented to validate the application's functionality. The vitest library is used for testing, and a Continuous Integration (CI) process has been set up to automatically execute tests whenever a pull request is made to the main branch.
+
+3. Logging: Error messages are formatted using built-in error handling utilities, making it easier for the frontend to display meaningful messages to the user via an easy to use API. Additionally, internal server errors are logged in the database using tRPC’s `onError` method for efficient error tracking.
+
+4. Responsive and Accessible Frontend: The frontend is designed to be both responsive and accessible. The Shadcn component library with Radix for accessibility is used to address various accessibility concerns. TailwindCSS is used to build a responsive design that adapts seamlessly to desktop, tablet, and mobile devices. For drag-and-drop functionality, the [@hello-pangea/dnd](https://github.com/hello-pangea/dnd) library, which supports both mouse and touchscreen devices.
+
+5. CI/CD Pipeline: A robust CI/CD pipeline has been configured using GitHub Actions and Vercel. As mentioned in point 2, tests are automatically run upon a pull request to the main branch. Additionally, GitHub has been configured to prevent direct pushes to the main branch. Once a push to the main branch is detected, Vercel automatically deploys the latest version of the application.
+
+6. Docker Configuration: A Docker configuration is available as an alternative deployment method. The `docker-compose.yml` file defines two services: one for the application and one for the database. The configuration also supports live code reloading during development, making it easier to test changes in real-time. For more details, refer to the [Docker section](#docker).
 
 ## Setup
 
@@ -112,6 +126,11 @@ docker compose up --watch
   - Edit task title and description
   - Move tasks between columns
   - Delete tasks
+
+- _Authentication_
+
+  - Register and login with username and password
+  - Each user gets to keep their own board
 
 - _UI & Responsiveness_
   - Fully responsive and accessible design
