@@ -29,33 +29,23 @@ export default function TaskCard({
   const { mutate: editTask, isPending: isEditTaskLoading } =
     api.task.editTask.useMutation({
       onSuccess: () => {
-        toast({
-          description: "Task updated successfully",
-        });
+        toast.default("Task updated successfully");
         setOpen(false);
         router.refresh();
       },
-      onError: () => {
-        toast({
-          description: "Something went wrong while updating task.",
-          variant: "destructive",
-        });
+      onError: (e) => {
+        toast.error(e.message);
       },
     });
   const { mutate: deleteTask, isPending: isDeleteTaskLoading } =
     api.task.deleteTask.useMutation({
       onSuccess: () => {
-        toast({
-          description: "Task deleted successfully",
-        });
+        toast.default("Task deleted successfully");
         setOpen(false);
         router.refresh();
       },
-      onError: () => {
-        toast({
-          description: "Something went wrong while deleting task.",
-          variant: "destructive",
-        });
+      onError: (e) => {
+        toast.error(e.message);
       },
     });
 
@@ -114,10 +104,7 @@ export default function TaskCard({
                     className="flex-grow"
                     onClick={() => {
                       if (!title) {
-                        toast({
-                          description: "Title is required",
-                          variant: "destructive",
-                        });
+                        toast.error("Title is required");
                         return;
                       }
 

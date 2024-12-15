@@ -10,16 +10,11 @@ export default function Navbar({ user }: { user: UserSafe }) {
   const router = useRouter();
   const { mutate: logout, isPending } = api.user.logout.useMutation({
     onSuccess: () => {
-      toast({
-        description: "Log out success",
-      });
+      toast.default("Log out success");
       router.replace("/login");
     },
-    onError: () => {
-      toast({
-        description: "Something went wrong while trying to log out.",
-        variant: "destructive",
-      });
+    onError: (e) => {
+      toast.error(e.message);
     },
   });
 

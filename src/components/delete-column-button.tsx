@@ -21,16 +21,11 @@ export default function DeleteColumnButton({ columnId }: { columnId: string }) {
     {
       onSuccess: () => {
         setOpen(false);
-        toast({
-          description: "Column deleted successfully",
-        });
+        toast.default("Column deleted successfully");
         router.refresh();
       },
-      onError: () => {
-        toast({
-          description: "Something went wrong while trying to delete column.",
-          variant: "destructive",
-        });
+      onError: (e) => {
+        toast.error(e.message);
       },
     },
   );

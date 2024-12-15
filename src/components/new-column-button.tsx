@@ -26,19 +26,13 @@ export default function NewColumnButton() {
   const { toast } = useToast();
   const { mutate: addColumn, isPending } = api.task.addColumn.useMutation({
     onSuccess: async () => {
-      toast({
-        description: "Column added successfully",
-      });
+      toast.default("Column added successfully");
       setOpen(false);
       setTitle("");
       router.refresh();
     },
-    onError: () => {
-      toast({
-        description:
-          "Something went wrong while adding a new column. Please try again later",
-        variant: "destructive",
-      });
+    onError: (e) => {
+      toast.error(e.message);
     },
   });
 
@@ -57,10 +51,7 @@ export default function NewColumnButton() {
           onSubmit={(e) => {
             e.preventDefault();
             if (!title) {
-              toast({
-                description: "Title is required",
-                variant: "destructive",
-              });
+              toast.error("Title is required");
               return;
             }
 

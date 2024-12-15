@@ -44,13 +44,28 @@ export const createTRPCContext = async (opts: { headers: Headers }) => {
 const t = initTRPC.context<typeof createTRPCContext>().create({
   transformer: superjson,
   errorFormatter({ shape, error }) {
+    let message = "Something went wrong. Please try again later.";
+    if (error.cause instanceof ZodError) {
+      const zodError = error.cause.flatten();
+
+      const fieldError = Object.entries(zodError.fieldErrors)[0]?.[1]?.[0];
+
+      if (zodError.formErrors[0]) message = zodError.formErrors[0];
+      else if (fieldError) message = fieldError;
+      return {
+        ...shape,
+        message,
+      };
+    }
+
+    if (shape.message) message = shape.message;
+
     return {
       ...shape,
       data: {
         ...shape.data,
-        zodError:
-          error.cause instanceof ZodError ? error.cause.flatten() : null,
       },
+      message,
     };
   },
 });
