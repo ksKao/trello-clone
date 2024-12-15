@@ -4,6 +4,7 @@ import { type NextRequest } from "next/server";
 import { env } from "@/env";
 import { appRouter } from "@/server/api/root";
 import { createTRPCContext } from "@/server/api/trpc";
+import { db } from "@/server/db";
 
 /**
  * This wraps the `createTRPCContext` helper and provides the required context for the tRPC API when
@@ -21,14 +22,26 @@ const handler = (req: NextRequest) =>
     req,
     router: appRouter,
     createContext: () => createContext(req),
-    onError:
-      env.NODE_ENV === "development"
-        ? ({ path, error }) => {
-            console.error(
-              `❌ tRPC failed on ${path ?? "<no-path>"}: ${error.message}`
-            );
-          }
-        : undefined,
+    onError: ({ path, error }) => {
+      if (env.NODE_ENV === "development")
+        console.error(
+          `❌ tRPC failed on ${path ?? "<no-path>"}: ${error.message}`,
+        );
+
+      if (error.code === "INTERNAL_SERVER_ERROR") {
+        db.log
+          .create({
+            data: {
+              error: JSON.stringify(error),
+              message: error.message,
+            },
+          })
+          // eslint-disable-next-line @typescript-eslint/no-empty-function
+          .then(() => {})
+          // eslint-disable-next-line @typescript-eslint/no-empty-function
+          .catch(() => {});
+      }
+    },
   });
 
 export { handler as GET, handler as POST };

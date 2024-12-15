@@ -28,20 +28,14 @@ export default function NewTaskButton({
   const [description, setDescription] = useState("");
   const { mutate: addTask, isPending } = api.task.addTask.useMutation({
     onSuccess: async () => {
-      toast({
-        description: "Task added successfully",
-      });
+      toast.default("Task added successfully");
       setOpen(false);
       setTitle("");
       setDescription("");
       router.refresh();
     },
-    onError: () => {
-      toast({
-        description:
-          "Something went wrong while adding a new task. Please try again later",
-        variant: "destructive",
-      });
+    onError: (e) => {
+      toast.error(e.message);
     },
   });
 
@@ -63,10 +57,7 @@ export default function NewTaskButton({
           onSubmit={(e) => {
             e.preventDefault();
             if (!title) {
-              toast({
-                description: "Title is required",
-                variant: "destructive",
-              });
+              toast.error("Title is required");
               return;
             }
 

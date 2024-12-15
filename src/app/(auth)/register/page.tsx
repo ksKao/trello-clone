@@ -16,17 +16,11 @@ export default function RegisterPage() {
   const [confirmPassword, setConfirmPassword] = useState("");
   const { mutate: register, isPending } = api.user.register.useMutation({
     onSuccess: () => {
-      toast({
-        description: "Account registered successfully",
-      });
+      toast.default("Account registered successfully");
       router.replace("/");
     },
-    onError: () => {
-      toast({
-        description:
-          "Something went wrong while trying to register an account. Please try again later.",
-        variant: "destructive",
-      });
+    onError: (e) => {
+      toast.error(e.message);
     },
   });
 
@@ -38,18 +32,12 @@ export default function RegisterPage() {
           e.preventDefault();
 
           if (password.length !== 6) {
-            toast({
-              description: "Password must be at least 6 characters long.",
-              variant: "destructive",
-            });
+            toast.error("Password must be at least 6 characters long.");
             return;
           }
 
           if (password !== confirmPassword) {
-            toast({
-              description: "Passwords do not match",
-              variant: "destructive",
-            });
+            toast.error("Passwords do not match");
             return;
           }
 

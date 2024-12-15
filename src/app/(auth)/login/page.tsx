@@ -15,16 +15,11 @@ export default function LoginPage() {
   const [password, setPassword] = useState("");
   const { mutate: login, isPending } = api.user.login.useMutation({
     onSuccess: () => {
-      toast({
-        description: "Login success",
-      });
+      toast.default("Login success");
       router.replace("/");
     },
     onError: (e) => {
-      toast({
-        description: e.message,
-        variant: "destructive",
-      });
+      toast.error(e.message);
     },
   });
 
@@ -36,18 +31,12 @@ export default function LoginPage() {
           e.preventDefault();
 
           if (!username) {
-            toast({
-              description: "Username is required",
-              variant: "destructive",
-            });
+            toast.error("Username is required");
             return;
           }
 
           if (!password) {
-            toast({
-              description: "Password is required",
-              variant: "destructive",
-            });
+            toast.error("Password is required");
             return;
           }
 

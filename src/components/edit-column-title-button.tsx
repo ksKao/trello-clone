@@ -29,17 +29,11 @@ export default function EditColumnTitleButton({
     api.task.editColumnName.useMutation({
       onSuccess: () => {
         setOpen(false);
-        toast({
-          description: "Column title updated successfully",
-        });
+        toast.default("Column title updated successfully");
         router.refresh();
       },
-      onError: () => {
-        toast({
-          description:
-            "Something went wrong while trying to edit column title.",
-          variant: "destructive",
-        });
+      onError: (e) => {
+        toast.error(e.message);
       },
     });
 
@@ -58,10 +52,7 @@ export default function EditColumnTitleButton({
           onSubmit={(e) => {
             e.preventDefault();
             if (!title) {
-              toast({
-                description: "Title is required",
-                variant: "destructive",
-              });
+              toast.error("Title is required");
               return;
             }
 

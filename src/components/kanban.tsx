@@ -26,15 +26,10 @@ export default function Kanban({
   const { mutate: sortColumn, isPending: isSortColumnLoading } =
     api.task.sortColumn.useMutation({
       onSuccess: () => {
-        toast({
-          description: "Column order updated successfully",
-        });
+        toast.default("Column order updated successfully");
       },
-      onError: () => {
-        toast({
-          description: "Something went wrong while trying to sort the column",
-          variant: "destructive",
-        });
+      onError: (e) => {
+        toast.error(e.message);
       },
       onSettled: () => {
         router.refresh();
@@ -43,15 +38,10 @@ export default function Kanban({
   const { mutate: updateTaskOrder, isPending: isMoveTaskLoading } =
     api.task.updateTaskOrder.useMutation({
       onSuccess: () => {
-        toast({
-          description: "Task moved successfully",
-        });
+        toast.default("Task moved successfully");
       },
-      onError: () => {
-        toast({
-          description: "Something went wrong while trying to move the task",
-          variant: "destructive",
-        });
+      onError: (e) => {
+        toast.error(e.message);
       },
       onSettled: () => {
         router.refresh();
